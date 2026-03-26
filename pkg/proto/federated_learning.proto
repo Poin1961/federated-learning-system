@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+option go_package = "github.com/Poin1961/federated-learning-system/pkg/proto";
+
+package proto;
+
+// ModelUpdate represents a client's local model update.
+message ModelUpdate {
+  string client_id = 1;
+  map<string, float> weights = 2;
+  map<string, float> metrics = 3;
+}
+
+// GlobalModelRequest is sent by a client to request the current global model.
+message GlobalModelRequest {
+  string client_id = 1;
+}
+
+// GlobalModel contains the aggregated global model parameters.
+message GlobalModel {
+  map<string, float> weights = 1;
+}
+
+// Acknowledgement is a simple response from the server.
+message Acknowledgement {
+  string message = 1;
+}
+
+// FederatedLearning service defines the RPC methods for federated learning.
+service FederatedLearning {
+  // Clients send their local model updates to the server.
+  rpc SendModelUpdate (ModelUpdate) returns (Acknowledgement);
+  // Clients request the current global model from the server.
+  rpc GetGlobalModel (GlobalModelRequest) returns (GlobalModel);
+}
